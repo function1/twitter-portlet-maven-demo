@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+    "http://java.sun.com/j2ee/dtds/web-app_2.2.dtd">
+
+<web-app>
+  <display-name>IDK</display-name>
+
+  <servlet>
+    <servlet-name>AxisServlet</servlet-name>
+    <display-name>Apache-Axis Servlet</display-name>
+    <servlet-class>
+        org.apache.axis.transport.http.AxisServlet
+    </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>AdminServlet</servlet-name>
+    <display-name>Axis Admin Servlet</display-name>
+    <servlet-class>
+        org.apache.axis.transport.http.AdminServlet
+    </servlet-class>
+    <load-on-startup>100</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>SOAPMonitorService</servlet-name>
+    <display-name>SOAPMonitorService</display-name>
+    <servlet-class>
+        org.apache.axis.monitor.SOAPMonitorService
+    </servlet-class>
+    <init-param>
+      <param-name>SOAPMonitorPort</param-name>
+      <param-value>5001</param-value>
+    </init-param>
+    <load-on-startup>100</load-on-startup>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>DocFetch</servlet-name>
+    <servlet-class>com.plumtree.remote.docfetch.DocFetch</servlet-class>
+    <!-- Modify the param-value below to reference your class -->
+    <init-param>
+      <param-name>DocFetchProvider</param-name>
+      <param-value>com.plumtree.dbsample.crawler.DbCrawlerDocumentProvider</param-value>
+    </init-param>
+  </servlet>
+
+
+  <servlet-mapping>
+    <servlet-name>DocFetch</servlet-name>
+    <url-pattern>/docfetch/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>AxisServlet</servlet-name>
+    <url-pattern>/servlet/AxisServlet</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>AxisServlet</servlet-name>
+    <url-pattern>*.jws</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>AxisServlet</servlet-name>
+    <url-pattern>/services/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>SOAPMonitorService</servlet-name>
+    <url-pattern>/SOAPMonitor</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>AdminServlet</servlet-name>
+    <url-pattern>/servlet/AdminServlet</url-pattern>
+  </servlet-mapping>
+  
+  <!-- config params are to match service names to impl params -->
+  
+<!-- ========== IDK Logging Web Configuration (version 5.2+) =========== -->
+<!--                                                                          -->
+<!-- Should be extracted to or duplicated in IDK Logging API documentation.   -->
+<!--                                                                          -->
+<!-- Three key-value pairs may be supplied in the web configuration           -->
+<!-- file (web.xml in Java servlet containers, or Web.config in IIS)          -->
+<!-- to determine the logging behavior of the IDK.                            -->
+<!--                                                                          -->
+<!-- The first two keys refer to the presence and destination of logs:        -->
+<!--                                                                          -->
+<!-- ptedk.LoggingApplicationName (string) sets the name of the log channel   -->
+<!--                              default: "" (empty) = do not generate logs  -->
+<!--                              Legal names are 1-32 characters long using  -->
+<!--                              ASCII a-zA-Z0-9 plus space and '-' '_' '.'  -->
+<!--                              Example: "WebServ-32.Crawler_15"            -->
+<!--                                                                          -->
+<!-- ptedk.LogToNetwork       (true/false) whether to log to the network      -->
+<!--                              default: false = log only to local machine  -->
+<!--                                                                          -->
+<!-- The third key refers to the level of detail of IDK log instrumentation:  -->
+<!--                                                                          -->
+<!-- ptedk.VerboseLogging     (true/false) log parameters/return values?      -->
+<!--                              default: false = do not log params/retvals  -->
+<!--                                                                          -->
+<!-- Portlet web services and other web applications using the IDK which need -->
+<!-- logging should copy and paste the following one of the following blocks  -->
+<!-- into the appropriate configuration file, setting the                     -->
+<!-- LoggingApplicationName value to a legal string value and setting the     -->
+<!-- other values "true" as appropriate.                                      -->
+<!--                                                                          -->
+<!-- The public logging API also offers logging initialization methods.       -->
+<!--                                                                          -->
+<!-- .NET/IIS (Web.config): insert in configuration/appSettings, changing the -->
+<!--  value attributes as appropriate:                                        -->
+<!--                                                                          -->
+<!--   <add key="ptedk.LoggingApplicationName" value="" />                    -->
+<!--   <add key="ptedk.LogToNetwork" value="false" />                         -->
+<!--   <add key="ptedk.VerboseLogging" value="false" />                       -->
+<!--                                                                          -->
+<!-- Java (web.xml)                                                           -->
+<!-- Insert as a block before the closing </web-app> tag, changing the        -->
+<!-- contents of the env-entry-value elements as appropriate:                 -->
+<!--                                                                          -->
+<!-- <env-entry>                                                              -->
+<!--     <env-entry-name>ptedk.LoggingApplicationName</env-entry-name>        -->
+<!--     <env-entry-value></env-entry-value>                                  --> 
+<!--     <env-entry-type>java.lang.String</env-entry-type>                    -->
+<!-- </env-entry>                                                             -->
+<!--                                                                          -->
+<!-- <env-entry>                                                              -->
+<!--     <env-entry-name>ptedk.LogToNetwork</env-entry-name>                  -->
+<!--     <env-entry-value>false</env-entry-value>                             --> 
+<!--     <env-entry-type>java.lang.Boolean</env-entry-type>                   -->
+<!-- </env-entry>                                                             -->
+<!--                                                                          -->
+<!-- <env-entry>                                                              -->
+<!--     <env-entry-name>ptedk.VerboseLogging</env-entry-name>                -->
+<!--     <env-entry-value>false</env-entry-value>                             --> 
+<!--     <env-entry-type>java.lang.Boolean</env-entry-type>                   -->
+<!-- </env-entry>                                                             -->
+<!--                                                                          -->
+
+  <env-entry>                                               
+    <env-entry-name>ptedk.LoggingApplicationName</env-entry-name>
+    <env-entry-value></env-entry-value> <!-- if empty will not log --> 
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+
+  <env-entry>                                               
+    <env-entry-name>ptedk.LogToNetwork</env-entry-name>
+    <!-- value=false : log only to local machine if logging enabled (default) -->
+    <!-- value=true  : log to network via IP multicast if logging enabled  -->
+    <env-entry-value>false</env-entry-value> 
+    <env-entry-type>java.lang.Boolean</env-entry-type>
+  </env-entry>
+
+  <env-entry>                                               
+    <env-entry-name>ptedk.VerboseLogging</env-entry-name>
+    <!-- value=false : do not log parameters and return values (default) -->
+    <!-- value=true  : log potentially sensitive parameters and return values -->
+    <env-entry-value>false</env-entry-value>  
+    <env-entry-type>java.lang.Boolean</env-entry-type>
+  </env-entry>
+<!-- ======= End IDK Logging Web Configuration ======== -->
+  
+  
+<!-- ========== Auth Service Settings =========== -->
+  
+  <!-- Auth -->
+  <env-entry>                                               
+    <env-entry-name>AuthProviderImpl</env-entry-name>
+	<!-- Value is set to the Hello World implementation. Replace this with your implementation of IAuthProvider -->
+    <env-entry-value>com.plumtree.remote.auth.helloworld.Auth</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+  
+  <!-- Sync -->
+  <env-entry>                                               
+    <env-entry-name>SyncProviderImpl</env-entry-name>
+	<!-- Value is set to the Hello World implementation. Replace this with your implementation of ISyncProvider -->
+	<env-entry-value>com.plumtree.remote.auth.helloworld.Sync</env-entry-value>
+	<env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>  
+
+<!-- ========== End Auth Service Settings =========== -->  
+
+
+<!-- ========== Crawler Service Settings =========== -->
+  
+  <!-- Container Provider -->
+  <env-entry>                                               
+     <env-entry-name>ContainerProviderImpl</env-entry-name>
+     <!-- Value is set to the Hello World implementation. Replace this with your implementation of IContainerProvider -->
+     <env-entry-value>com.plumtree.remote.crawler.helloworld.ContainerProvider</env-entry-value>
+     <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+  
+  <!-- Document Provider -->
+  <env-entry>                                               
+    <env-entry-name>DocumentProviderImpl</env-entry-name>
+    <!-- Value is set to the Hello World implementation. Replace this with your implementation of IDocumentProvider -->
+    <env-entry-value>com.plumtree.remote.crawler.helloworld.DocumentProvider</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>  
+
+  <!-- Doc Fetch URL -->
+  <env-entry>                                               
+    <env-entry-name>DocFetchURL</env-entry-name>
+    <!-- If using docFetch, replace this with context/servlet mapping. For example databaserecordviewer/docfetch-->
+    <env-entry-value></env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry> 
+     
+  <!-- Doc Fetch Index File Path -->
+  <env-entry>                                               
+    <env-entry-name>IndexFilePath</env-entry-name>
+    <!-- REPLACE: yourAppDirectory with your application 
+         server directory into which you are deploying the 
+         databaserecordviewer, for example c:\\Tomcat\webapps. IndexFilePath is where indexed 
+         documents will be mirrored so you must have 
+         write permission to this directory -->	      
+    <env-entry-value></env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry> 
+  
+  <!-- Doc Fetch Index URL Prefix -->
+  <env-entry>                                               
+    <env-entry-name>IndexURLPrefix</env-entry-name>
+    <!-- REPLACE: yourhost and yourport with the correct 
+         values for the application server you 
+         are deploying the databaserecordviewer to -->      
+    <env-entry-value></env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>   
+  
+<!-- ========== End Crawler Service Settings =========== -->
+
+
+<!-- ========== Profile Service Settings =========== -->
+  
+  <!-- Profile -->
+  <env-entry>                                               
+    <env-entry-name>ProfileProviderImpl</env-entry-name>
+    <!-- Value is set to the Hello World implementation. Replace this with your implementation of IProfileProvider -->
+    <env-entry-value>com.plumtree.remote.profile.helloworld.Profile</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry> 
+
+<!-- ========== End Profile Service Settings =========== -->
+
+
+<!-- ========== Search Service Settings =========== -->
+
+  <!-- Search-->
+  <env-entry>                                               
+    <env-entry-name>SearchImpl</env-entry-name>
+    <!-- Value is set to the Hello World implementation. Replace this with your implementation of IRemoteSearch -->
+    <env-entry-value>com.plumtree.remote.search.helloworld.Search</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry> 
+
+<!-- ========== End Search Service Settings =========== -->
+
+<!-- ========== SCI Settings =========== -->
+
+  <!-- SCI -->
+  <env-entry>                                               
+    <env-entry-name>SciImpl</env-entry-name>
+    <!-- Value is set to the Hello World implementation. Replace this with your implementation of IAdminEditor -->
+    <env-entry-value>com.plumtree.remote.crawler.helloworld.AdminEditor</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry> 
+
+<!-- ========== End SCI Settings =========== -->
+
+<!-- ======= Migration Web Service (MWS) only ======== -->
+<!-- When creating a Migration Web Service (MWS) you must specify the  -->
+<!-- JAR file and fully-qualified class name of the MWS provider       -->
+<!-- interface you have written.                                       -->
+
+  <env-entry>                                               
+      <env-entry-name>MigrationProviderImpl</env-entry-name>
+      <env-entry-value>REPLACE Fully-Qualified Class Name</env-entry-value>  
+      <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+
+<!-- ======= End (MWS) ======== -->
+
+<!-- ======= IDK Credential Settings ======== -->
+<!-- The ICredentialProvider and ICredentialSetter interfaces	-->
+<!-- provide easy methods to get and set credentials from/to the	-->
+<!-- the portal headers.							-->
+<!--											-->
+<!-- When writing portlets for ALI version 6.0+ that use the  -->
+<!-- Credential Vault, you must specify the RSAPrivateKey to use  -->
+<!-- when decrypting the password sent by the Portal.  No other	-->
+<!-- settings are required.							-->
+<!--											-->
+<!-- When writing a portlet for a previous version of the portal	-->
+<!-- you must specify in the config file what type of setting	-->
+<!-- headers are being used to pass the credentials, what the 	-->
+<!-- names of the username and password parameters are, the 	-->
+<!-- encryption type being used, and the private key used for	-->
+<!-- encryption/decryption.							-->
+
+<!--
+  <env-entry>
+	<description>Holds the private key used for RSA decryption.</description>
+	<env-entry-name>RSAPrivateKey</env-entry-name>
+	<env-entry-value></env-entry-value>
+	<env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+
+
+  <env-entry>
+	<description>
+		Indicates the type of setting that holds credential information for the ICredentialProvider.
+		Can be GADGET, COMMUNITYGADGET, COMMUNITY, ADMIN, SESSION, USER, or USERINFO.
+	</description>
+	<env-entry-name>CredentialSettingType</env-entry-name>
+	<env-entry-value></env-entry-value>
+	<env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+	
+  <env-entry>
+	<description>Indicates the name of the setting that holds the username.</description>
+	<env-entry-name>UsernameParameterName</env-entry-name>
+	<env-entry-value></env-entry-value>
+	<env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+
+  <env-entry>
+	<description>Indicates the name of the setting that holds the password.</description>
+	<env-entry-name>PasswordParameterName</env-entry-name>
+	<env-entry-value></env-entry-value>
+	<env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+	
+  <env-entry>
+	<description>
+		Indicates the type of encryption used for the password.
+		Can be NONE, BASE64, RC2, or AES.
+	</description>
+	<env-entry-name>CredentialEncryptionType</env-entry-name>
+	<env-entry-value></env-entry-value>
+	<env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+	
+  <env-entry>
+	<description>Holds the private key used for RC2 encryption/decryption.</description>
+	<env-entry-name>RC2PrivateKey</env-entry-name>
+	<env-entry-value></env-entry-value>
+	<env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+
+  <env-entry>
+	<description>Holds the private key used for AES encryption/decryption.</description>
+	<env-entry-name>AESPrivateKey</env-entry-name>
+	<env-entry-value></env-entry-value>
+	<env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+-->
+
+
+<!-- ========== Setting-Config File  Settings =========== -->
+  
+  <!-- Profile -->
+  <env-entry>                                               
+    <env-entry-name>ptidk.SettingConfigFile</env-entry-name>
+    <!-- Value is set to the Hello World implementation. Replace this with your implementation of IProfileProvider -->
+    <env-entry-value>setting-mapping-sample.xml</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry> 
+
+</web-app>

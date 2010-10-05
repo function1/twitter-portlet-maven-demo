@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+  <globalConfiguration>
+    <parameter name="adminPassword" value="admin" />
+    <parameter name="sendXsiTypes" value="true" />
+    <parameter name="sendMultiRefs" value="true" />
+    <parameter name="sendXMLDeclaration" value="true" />
+    <requestFlow>
+      <handler type="java:org.apache.axis.handlers.JWSHandler">
+        <parameter name="scope" value="session" />
+      </handler>
+      <handler type="java:org.apache.axis.handlers.JWSHandler">
+        <parameter name="scope" value="request" />
+        <parameter name="extension" value=".jwr" />
+      </handler>
+    </requestFlow>
+  </globalConfiguration>
+  <handler name="Authenticate" type="java:org.apache.axis.handlers.SimpleAuthenticationHandler" />
+  <handler name="URLMapper" type="java:org.apache.axis.handlers.http.URLMapper" />
+  <handler name="LocalResponder" type="java:org.apache.axis.transport.local.LocalResponder" />
+  <handler name="MsgDispatcher" type="java:org.apache.axis.providers.java.MsgProvider" />
+  <handler name="RPCDispatcher" type="java:org.apache.axis.providers.java.RPCProvider" />
+  <transport name="http">
+    <requestFlow>
+      <handler type="URLMapper" />
+      <handler type="java:org.apache.axis.handlers.http.HTTPAuthHandler" />
+    </requestFlow>
+  </transport>
+  <transport name="local">
+    <responseFlow>
+      <handler type="java:org.apache.axis.transport.local.LocalResponder" />
+    </responseFlow>
+  </transport>
+  <!-- Service definitions -->
+  <service name="AdminService" provider="java:MSG">
+    <parameter name="allowedMethods" value="AdminService" />
+    <parameter name="enableRemoteAdmin" value="false" />
+    <parameter name="className" value="org.apache.axis.utils.Admin" />
+    <namespace>http://xml.apache.org/axis/wsdd/</namespace>
+  </service>
+  <service name="Version" provider="java:RPC">
+    <parameter name="allowedMethods" value="getVersion" />
+    <parameter name="className" value="org.apache.axis.Version" />
+  </service>
+  <!-- Auth and Sync Services -->
+  <service name="SyncProviderSoapBinding" provider="java:RPC">
+    <parameter name="wsdlTargetNamespace" value="urn:rap-synch-v1" />
+    <parameter name="wsdlServiceElement" value="SyncProvider" />
+    <parameter name="wsdlServicePort" value="SyncProviderSoapBinding" />
+    <parameter name="className" value="com.plumtree.remote.auth.soap.SyncProviderSoapBindingSkeleton" />
+    <parameter name="wsdlPortType" value="SyncProviderSoapBinding" />
+    <parameter name="allowedMethods" value="*" />
+    <parameter name="scope" value="Session" />
+    <typeMapping xmlns:ns="urn:rap-synch-v1/encodedTypes" qname="ns:ArrayOfString" type="java:java.lang.String[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/xui/" qname="ns:NamedValue" type="java:com.plumtree.remote.auth.soap.NamedValue" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/xui/" qname="ns:ArrayOfNamedValue" type="java:com.plumtree.remote.auth.soap.NamedValue[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="urn:rap-synch-v1/AbstractTypes" qname="ns:StringArray" type="java:java.lang.String[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+  </service>
+  <service name="AuthProviderSoapBinding" provider="java:RPC">
+    <parameter name="wsdlTargetNamespace" value="urn:rap-auth-v1" />
+    <parameter name="wsdlServiceElement" value="AuthProvider" />
+    <parameter name="wsdlServicePort" value="AuthProviderSoapBinding" />
+    <parameter name="className" value="com.plumtree.remote.auth.soap.AuthProviderSoapBindingSkeleton" />
+    <parameter name="wsdlPortType" value="AuthProviderSoapBinding" />
+    <parameter name="allowedMethods" value="*" />
+    <parameter name="scope" value="Session" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/xui/" qname="ns:NamedValue" type="java:com.plumtree.remote.auth.soap.NamedValue" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/xui/" qname="ns:ArrayOfNamedValue" type="java:com.plumtree.remote.auth.soap.NamedValue[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+  </service>
+  <!-- Crawler Services: Container Provider and Document Provider -->
+  <service name="ContainerProviderSoapBinding" provider="java:RPC">
+    <parameter name="wsdlTargetNamespace" value="http://www.plumtree.com/xmlschemas/cws/cws.wsdl" />
+    <parameter name="wsdlServiceElement" value="CrawlServer" />
+    <parameter name="wsdlServicePort" value="ContainerProviderSoapBinding" />
+    <parameter name="className" value="com.plumtree.remote.crawler.soap.ContainerProviderSoapBindingSkeleton" />
+    <parameter name="wsdlPortType" value="ContainerProviderSoapBinding" />
+    <parameter name="allowedMethods" value="*" />
+    <parameter name="scope" value="Session" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/cws/" qname="ns:ArrayOfstring" type="java:java.lang.String[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/cws/" qname="ns:ACLEntry" type="java:com.plumtree.remote.crawler.soap.ACLEntry" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/cws/" qname="ns:ArrayOfACLEntry" type="java:com.plumtree.remote.crawler.soap.ACLEntry[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/cws/" qname="ns:ChildContainer" type="java:com.plumtree.remote.crawler.soap.ChildContainer" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/cws/" qname="ns:ArrayOfChildContainer" type="java:com.plumtree.remote.crawler.soap.ChildContainer[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/cws/" qname="ns:ChildDocument" type="java:com.plumtree.remote.crawler.soap.ChildDocument" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/cws/" qname="ns:ArrayOfChildDocument" type="java:com.plumtree.remote.crawler.soap.ChildDocument[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/xui/" qname="ns:NamedValue" type="java:com.plumtree.remote.crawler.soap.NamedValue" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/xui/" qname="ns:ArrayOfNamedValue" type="java:com.plumtree.remote.crawler.soap.NamedValue[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+  </service>
+  <service name="DocumentProviderSoapBinding" provider="java:RPC">
+    <parameter name="wsdlTargetNamespace" value="http://www.plumtree.com/xmlschemas/cws/cws.wsdl" />
+    <parameter name="wsdlServiceElement" value="CrawlServer" />
+    <parameter name="wsdlServicePort" value="DocumentProviderSoapBinding" />
+    <parameter name="className" value="com.plumtree.remote.crawler.soap.DocumentProviderSoapBindingSkeleton" />
+    <parameter name="wsdlPortType" value="DocumentProviderSoapBinding" />
+    <parameter name="DocFetchURL" value="axis/docfetch" />
+    <parameter name="allowedMethods" value="*" />
+    <parameter name="scope" value="Session" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/cws/" qname="ns:ArrayOfstring" type="java:java.lang.String[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/cws/" qname="ns:ACLEntry" type="java:com.plumtree.remote.crawler.soap.ACLEntry" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/cws/" qname="ns:ArrayOfACLEntry" type="java:com.plumtree.remote.crawler.soap.ACLEntry[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/cws/" qname="ns:ChildContainer" type="java:com.plumtree.remote.crawler.soap.ChildContainer" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/cws/" qname="ns:ArrayOfChildContainer" type="java:com.plumtree.remote.crawler.soap.ChildContainer[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/cws/" qname="ns:ChildDocument" type="java:com.plumtree.remote.crawler.soap.ChildDocument" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/cws/" qname="ns:ArrayOfChildDocument" type="java:com.plumtree.remote.crawler.soap.ChildDocument[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/cws/" qname="ns:DataHandler" languageSpecificType="java:javax.activation.DataHandler" serializer="org.apache.axis.encoding.ser.JAFDataHandlerSerializerFactory" deserializer="org.apache.axis.encoding.ser.JAFDataHandlerDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/xui/" qname="ns:NamedValue" type="java:com.plumtree.remote.crawler.soap.NamedValue" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/xui/" qname="ns:ArrayOfNamedValue" type="java:com.plumtree.remote.crawler.soap.NamedValue[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+  </service>
+  <!-- Profile Service -->
+  <service name="ProfileProviderSoapBinding" provider="java:RPC">
+    <parameter name="wsdlTargetNamespace" value="http://www.plumtree.com/soap/pws/" />
+    <parameter name="wsdlServiceElement" value="ProfileProvider" />
+    <parameter name="wsdlServicePort" value="ProfileProviderSoapBinding" />
+    <parameter name="className" value="com.plumtree.remote.profile.soap.ProfileProviderSoapBindingSkeleton" />
+    <parameter name="wsdlPortType" value="ProfileProviderSoapPort" />
+    <parameter name="allowedMethods" value="*" />
+    <parameter name="scope" value="Session" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/soap/pws/" qname="ns:ArrayOfString" type="java:java.lang.String[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/xui/" qname="ns:NamedValue" type="java:com.plumtree.remote.profile.soap.NamedValue" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/xui/" qname="ns:ArrayOfNamedValue" type="java:com.plumtree.remote.profile.soap.NamedValue[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+  </service>
+  <!-- SCI (XUI) Service -->
+  <service name="SciProviderSoapBinding" provider="java:RPC">
+    <parameter name="wsdlTargetNamespace" value="urn:xui" />
+    <parameter name="wsdlServiceElement" value="SCIServiceService" />
+    <parameter name="wsdlServicePort" value="SciProviderSoapBinding" />
+    <parameter name="className" value="com.plumtree.remote.sci.soap.SciSoapBindingSkeleton" />
+    <parameter name="wsdlPortType" value="SciProviderSoapBinding" />
+    <parameter name="allowedMethods" value="*" />
+    <parameter name="scope" value="Session" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/xui/" qname="ns:NamedValue" type="java:com.plumtree.remote.sci.soap.NamedValue" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/xui/" qname="ns:ArrayOfNamedValue" type="java:com.plumtree.remote.sci.soap.NamedValue[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/xui/" qname="ns:SCIPage" type="java:com.plumtree.remote.sci.soap.SCIPage" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/xui/" qname="ns:ArrayOfSCIPage" type="java:com.plumtree.remote.sci.soap.SCIPage[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+  </service>
+  <!-- Search Service -->
+  <service name="SearchProviderSoapBinding" provider="java:RPC">
+    <parameter name="wsdlTargetNamespace" value="urn:search" />
+    <parameter name="wsdlServiceElement" value="SearchServiceService" />
+    <parameter name="wsdlServicePort" value="SearchProviderSoapBinding" />
+    <parameter name="className" value="com.plumtree.remote.search.soap.SearchSoapBindingSkeleton" />
+    <parameter name="wsdlPortType" value="SearchProviderSoapBinding" />
+    <parameter name="allowedMethods" value="*" />
+    <parameter name="scope" value="Session" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/sws/" qname="ns:NamedValue" type="java:com.plumtree.remote.search.soap.NamedValue" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/sws/" qname="ns:SearchResult" type="java:com.plumtree.remote.search.soap.SearchResult" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="urn:search" qname="ns:ArrayOf_tns2_SearchRecord" type="java:com.plumtree.remote.search.soap.SearchRecord[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/sws/" qname="ns:SearchRecord" type="java:com.plumtree.remote.search.soap.SearchRecord" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="urn:search" qname="ns:ArrayOf_tns2_NamedValue" type="java:com.plumtree.remote.search.soap.NamedValue[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+  </service>
+  <service name="MigrationWebServiceAPI" provider="java:RPC" style="rpc" use="encoded">
+    <parameter name="wsdlTargetNamespace" value="http://www.plumtree.com/xmlschemas/api/MigrationWebServiceAPI.wsdl" />
+    <parameter name="wsdlServiceElement" value="MigrationWebServiceAPI" />
+    <parameter name="wsdlServicePort" value="MigrationWebServiceAPI" />
+    <parameter name="className" value="com.plumtree.remote.migration.transport.server.soap.MigrationWebService.MigrationWebServiceAPISoapBindingSkeleton" />
+    <parameter name="wsdlPortType" value="IMigrationWebServiceProcedures" />
+    <parameter name="allowedMethods" value="*" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/api/MigrationWebServiceAPI.wsdl" qname="ns:UndeclaredBackEndException" type="java:com.plumtree.remote.migration.transport.server.soap.MigrationWebService.UndeclaredBackEndException" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/api/MigrationWebServiceAPI.wsdl" qname="ns:NamedValue" type="java:com.plumtree.remote.migration.transport.server.soap.MigrationWebService.NamedValue" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/api/MigrationWebServiceAPI.wsdl" qname="ns:TransportException" type="java:com.plumtree.remote.migration.transport.server.soap.MigrationWebService.TransportException" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/api/MigrationWebServiceAPI.wsdl" qname="ns:ArrayOf_xsd_int" type="java:int[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <typeMapping xmlns:ns="http://www.plumtree.com/xmlschemas/api/MigrationWebServiceAPI.wsdl" qname="ns:ArrayOfNamedValue" type="java:com.plumtree.remote.migration.transport.server.soap.MigrationWebService.NamedValue[]" serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+  </service>
+</deployment>
+

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.function1</groupId>
+  <artifactId>wci-twitter-portlet</artifactId>
+  <packaging>war</packaging>
+  <version>0.1</version>
+  <name>WebCenter Interation Twitter Portlet</name>
+
+  <repositories>
+    <repository>
+      <id>thirdparty</id>
+      <name>Thirdparty Jars</name>
+      <url>file://${basedir}/thirdparty/m2/repository</url>
+      <layout>default</layout>
+    </repository>
+  </repositories>
+
+  <properties>
+    <!-- Credentials used by the portlet to connect to twitter-->
+    <twitter.login>Your Twitter Login</twitter.login>
+    <twitter.password>Your Twitter Password</twitter.password>
+
+    <!--  tell the compiler which version of java to use -->
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
+  </properties>
+
+  <!-- BEGIN IDK DEPENDENCIES -->
+  <dependencies>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>idk</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>activation</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>axis</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>commons-discovery</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>concurrent</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>jakarta-oro</artifactId>
+      <version>2.0.7</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>jaxrpc</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <!-- Use junit dependency from mavn repo instead of getting it from 
+	 local idk 
+	 <dependency>
+	   <groupId>com.oracle.idk</groupId>
+	   <artifactId>junit</artifactId>
+	   <version>10.3</version>
+	 </dependency>-->
+    <!-- Use log4j dependency from mavn repo instead of getting it from 
+	 local idk 
+	 <dependency>
+	   <groupId>com.oracle.idk</groupId>
+	   <artifactId>log4j</artifactId>
+	   <version>1.2.8</version>
+	 </dependency>-->
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>mail</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>openfoundation</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>openkernel</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>openlog-framework</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>oreilly</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>pmb</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>idk</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>ptrat</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>saaj</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>wsdl4j</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>xerces144</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>idk</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.idk</groupId>
+      <artifactId>idk</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <!-- END IDK DEPENDENCIES -->
+    <dependency>
+      <groupId>org.twitter4j</groupId>
+      <artifactId>twitter4j-core</artifactId>
+      <version>[2.1,)</version>
+    </dependency>
+    <dependency>
+      <groupId>servletapi</groupId>
+      <artifactId>servletapi</artifactId>
+      <version>2.4</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.4</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.15</version>
+      <exclusions>
+      	<exclusion>
+      	  <groupId>javax.mail</groupId>
+      	  <artifactId>mail</artifactId>
+	</exclusion>
+      	<exclusion>
+      	  <groupId>javax.jms</groupId>
+      	  <artifactId>jms</artifactId>
+	</exclusion>
+      	<exclusion>
+      	  <groupId>com.sun.jdmk</groupId>
+      	  <artifactId>jmxtools</artifactId>
+	</exclusion>
+      	<exclusion>
+      	  <groupId>com.sun.jmx</groupId>
+      	  <artifactId>jmxri</artifactId>
+	</exclusion>
+      </exclusions>
+    </dependency>
+
+  </dependencies>
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-compiler-plugin</artifactId>
+	<version>2.0.2</version>
+	<configuration>
+	  <source>${maven.compiler.source}</source>
+	  <target>${maven.compiler.target}</target>
+	  <module>com.function1.formbuilder.FormBuilder</module>
+	</configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

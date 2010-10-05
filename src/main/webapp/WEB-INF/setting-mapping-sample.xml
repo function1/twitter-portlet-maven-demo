@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  Configure the settings that map to a particular resource identifier.
+  -->
+<!--  
+  todo: look at the openconfig file format 
+  -->
+<setting-mapping>
+	<!--  Scope Definition Section -->
+	<!-- Runner: session|pagelet -->
+	<!-- Portal: admin|community|communityportlet|portlet|session|user|userinfo -->
+	<!-- Option 1: Configure the scope chain globally for all pagelets -->
+	<global-scope-chain>
+		<scope name="session"/>
+		<scope name="community"/>
+		<scope name="admin"/>
+		<scope name="communityportlet"/>
+		<scope name="querystring"/>
+	</global-scope-chain>
+	<!-- A chain of scopes that can be referenced using "scope-chain-ref" in lieu of 
+         declaring scopes individually. 
+      -->
+	<scope-chain name="local-scope">
+		<scope name="session"/>
+		<scope name="admin"/>
+	</scope-chain>
+	<!--  Identifier Definition Section -->
+	<!-- Option 2: Configure the scope chain for a specific proxied resource -->
+	<proxy-resource identifier="pagelet-foo">
+		<scope-chain>
+			<scope name="session"/>
+			<scope name="community"/>
+			<scope name="admin"/>
+		</scope-chain>
+	</proxy-resource>
+	<!-- Option 3: Configure the scope chain for a specific proxied resource -->
+	<proxy-resource identifier="pagelet-doo">
+		<scope-chain-ref name="local-scope"/>
+	</proxy-resource>
+	<!-- Option 4: Configure the scope chain for a specific proxied resource's setting -->
+	<proxy-resource identifier="Ritesh">
+		<!-- This is a setting mapping for a setting called "color" -->
+		<setting name="color">
+			<!-- Configure the scopes that are searched in order for a request of type "portlet" -->
+			<scope-chain>
+				<!-- Scopes are searched for a preference called "color" in top-to-bottom order -->
+				<scope name="session"/>
+				<scope name="community"/>
+				<scope name="admin"/>
+			</scope-chain>
+		</setting>
+		<!--  This is a setting mapping for a "size" that uses the  local scope hierarchy -->
+		<setting name="size">
+			<scope-chain-ref name="local-scope"/>
+		</setting>
+	</proxy-resource>
+</setting-mapping>
