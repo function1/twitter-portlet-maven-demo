@@ -1,7 +1,7 @@
 # Use Maven to create a WCI Portlet
 
 This is an example of how Maven can be used to help manage jar
-dependencies to develop a WIC Portlet. This portlet displays a
+dependencies to develop a WCI Portlet. This portlet displays a
 few of your most recent tweets from Twitter. Please see the the
 [Everything Maven Part 2 - Twitter Portlet](http://www.function1.com/2010/03/everything-maven-part-2-twitter-portlet/)
 article for more detail.
@@ -34,4 +34,4 @@ in the pom. If tests pass, it will build a war under a directory named
 3) Deploy the war file to your portlet server. For example, you can drop the war into TOMCAT_HOME/webapps
 
 4) Import the pte file to create appropriate portal objects (Remote
-Server, Web Service, and Portlet) (comming soon)
+Server, Web Service, and Portlet) (coming soon)
